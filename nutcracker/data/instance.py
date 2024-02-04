@@ -28,7 +28,7 @@ class Instance:
         Returns:
             Instance: An instance of the specified construction.
         """
-        if config['construction'].lower().strip() == "mcq":
+        if config['construction']['class'].lower().strip() == "mcq":
             # example_data_list can be empty for zero-shot evaluation
             example_data_list = kwargs.get('example_data_list')
             return MCQInstance(config, test_data, example_data_list)

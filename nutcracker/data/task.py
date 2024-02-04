@@ -63,9 +63,11 @@ class Task:
             Task: An initialized Task object.
         """
         cls.logger = logging.getLogger(__name__)
-        
-        # Use the db_directory to construct the path to the config file
-        config_path = os.path.join(db_directory, "data_config", "task", f"{task_name}.yaml")
+        # Determine the directory of the current script in the library
+        library_dir = os.path.dirname(os.path.abspath(__file__))
+        # Construct the path to the config file relative to the library directory
+        config_path = os.path.join(library_dir, "data_config", "task", f"{task_name}.yaml")
+        print(config_path)
         if not os.path.exists(config_path):
             raise FileNotFoundError(f"Config file for task name '{task_name}' not found at {config_path}")
         # Load task config

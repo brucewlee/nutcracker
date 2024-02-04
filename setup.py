@@ -2,9 +2,10 @@ from distutils.core import setup
 from setuptools import find_packages
 # python setup.py sdist
 # python -m twine upload dist/*
+# pip install -e .
 setup(
     name = 'nutcracker',  
-    version='0.0.1a1',
+    version='0.0.1a2',
     description = 'In Development',
     author = 'Bruce W. Lee',
     author_email = 'bruce@walnutresearch.com', 
@@ -17,5 +18,5 @@ setup(
           'openai>=1.10.0'
       ],
     include_package_data=True,
-    package_data={'': ['*']}
+    package_data={'nutcracker': ['*']}
 )
