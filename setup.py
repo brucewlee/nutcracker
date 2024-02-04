@@ -4,7 +4,7 @@ from setuptools import find_packages
 # python -m twine upload dist/*
 setup(
     name = 'nutcracker',  
-    version='0.0.1a0',
+    version='0.0.1a1',
     description = 'In Development',
     author = 'Bruce W. Lee',
     author_email = 'bruce@walnutresearch.com', 
