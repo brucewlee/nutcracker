@@ -1,0 +1,5 @@
+filename:
+  test: test.json
+  dev: dev.json
+  config: config.yaml
+task_name: mmlu-econometrics
