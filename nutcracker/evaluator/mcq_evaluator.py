@@ -8,19 +8,19 @@ from openai import OpenAI
 #
 #
 class MCQEvaluator:
-    def __init__(self, instances: List[MCQInstance], evaluation_method: str = "rule-matching") -> None:
-        self.instances = instances
+    def __init__(self, data: List[MCQInstance], evaluation_method: str = "rule-matching") -> None:
+        self.data = data
         self.evaluation_method = evaluation_method
 
 
 
     def run(self) -> float:
         correct_count = 0
-        for instance in self.instances:
+        for instance in self.data:
             if self._is_correct(instance):
                 correct_count += 1
 
-        return round(correct_count / len(self.instances),5) if self.instances else 0.0
+        return round(correct_count / len(self.data),5) if self.data else 0.0
 
 
 
