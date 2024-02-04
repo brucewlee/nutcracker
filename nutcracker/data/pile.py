@@ -129,7 +129,7 @@ class Pile:
             None
         """
         if self.instances:
-            constructions = {instance.config['construction'] for instance in self.instances}
+            constructions = {instance.config['construction']['class'] for instance in self.instances}
 
             if len(constructions) > 1:
                 error_msg = f"Detected constructions are: {', '.join(constructions)}"
