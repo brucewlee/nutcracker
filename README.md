@@ -14,6 +14,12 @@ git clone https://github.com/Walnut-Research/nutcracker-db
 ```
 
 ## Understanding Nutcracker
+### Running Demo
+
+
+https://github.com/Walnut-Research/nutcracker/assets/54278520/3e322002-34c3-486d-90e7-adf67d678760
+
+
 ### Instance, Task, Pile
 ```python
 from nutcracker.data import Task, Pile
