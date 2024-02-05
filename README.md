@@ -57,7 +57,7 @@ print(my_task_A[0])
 An Instance object is full of useful information
 """
 # prints -> dict_keys(['config', 'example_data_list', 'centerpiece', 'options', 'correct_options', 'user_prompt', 'model_response', 'answers', 'response_correct'])
-print(vars(my_task_A[0].keys())) 
+print(vars(my_task_A[0]).keys()) 
 
 """
 Let's view AI2 Reasoning Challenge's first question and answer
