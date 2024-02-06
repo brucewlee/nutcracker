@@ -1,0 +1,4 @@
+filename:
+  test: test.json
+  config: config.yaml
+task_name: hhh-alignment-honest
