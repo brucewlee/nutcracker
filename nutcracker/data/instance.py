@@ -66,6 +66,11 @@ class MCQInstance(Instance):
         self.options = test_data["options"]
         self.correct_options = test_data["correct_options"]
 
+        # Check if 'context' key exists in test_data
+        self.context_exists = 'context' in test_data and test_data['context']
+        if self.context_exists:
+            self.context = test_data["context"]
+
         # below are derivational attributes that will be updated during code run
         self.user_prompt = self._format_user_prompt()
         self.model_response = None
@@ -74,17 +79,15 @@ class MCQInstance(Instance):
 
 
     
-    def _format_user_prompt(
-            self,
-        ) -> str:
+    def _format_user_prompt(self) -> str:
         """Format the user prompt.
-        
+
         Args:
             None
-        
+
         Raises:
             ValueError: If the user prompt template is invalid.
-            
+
         Returns:
             str: Formatted user prompt.
         """
@@ -97,7 +100,7 @@ class MCQInstance(Instance):
                     value = value.replace('<wild*card>', '')
                     
                     # Creating the complete function definition from YAML content
-                    function_definition = f"def wildcard_formatter(centerpiece, options, correct_options):\n    {value}"
+                    function_definition = f"def wildcard_formatter(centerpiece, options, correct_options, context=None):\n    {value}"
 
                     # Create the function dynamically
                     exec_globals = {}
@@ -107,35 +110,55 @@ class MCQInstance(Instance):
                     if key == 'example':
                         for example_data in self.example_data_list[:self.config['few_shot']]:
                             user_prompt += wildcard_formatter(
-                                centerpiece = example_data['centerpiece'],
-                                options = example_data['options'],
-                                correct_options = example_data['correct_options']
+                                context=example_data['context'],
+                                centerpiece=example_data['centerpiece'],
+                                options=example_data['options'],
+                                correct_options=example_data['correct_options']
+                            ) if self.context_exists else wildcard_formatter(
+                                centerpiece=example_data['centerpiece'],
+                                options=example_data['options'],
+                                correct_options=example_data['correct_options']
                             )
                     else:
                         user_prompt += wildcard_formatter(
-                            centerpiece = self.centerpiece,
-                            options = self.options,
-                            correct_options = self.correct_options
+                            context=self.context,
+                            centerpiece=self.centerpiece,
+                            options=self.options,
+                            correct_options=self.correct_options
+                        ) if self.context_exists else wildcard_formatter(
+                            centerpiece=self.centerpiece,
+                            options=self.options,
+                            correct_options=self.correct_options
                         )
                 # if no wildcard, format normally
                 else:
                     if key == 'example':
                         for example_data in self.example_data_list[:self.config['few_shot']]:
-                            #print(self.example_data_list)
                             user_prompt += value.format(
-                                centerpiece = example_data['centerpiece'],
-                                options = example_data['options'],
-                                correct_options = example_data['correct_options']
-                            )               
+                                context=example_data['context'],
+                                centerpiece=example_data['centerpiece'],
+                                options=example_data['options'],
+                                correct_options=example_data['correct_options']
+                            ) if self.context_exists else value.format(
+                                centerpiece=example_data['centerpiece'],
+                                options=example_data['options'],
+                                correct_options=example_data['correct_options']
+                            )                
                     else:
                         user_prompt += value.format(
-                            centerpiece = self.centerpiece,
-                            options = self.options,
-                            correct_options = self.correct_options
+                            context=self.context,
+                            centerpiece=self.centerpiece,
+                            options=self.options,
+                            correct_options=self.correct_options
+                        ) if self.context_exists else value.format(
+                            centerpiece=self.centerpiece,
+                            options=self.options,
+                            correct_options=self.correct_options
                         )
 
         # if user prompt is empty, raise error
         if not user_prompt:
-            ValueError("Invalid user prompt template")
+            raise ValueError("Invalid user prompt template")
 
         return user_prompt
+

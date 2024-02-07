@@ -3,9 +3,10 @@ import random
 #
 from nutcracker.data.instance import Instance
 from nutcracker.data.task import Task
+from nutcracker.data.instance_collection import InstanceCollection
 #
 #
-class Pile:
+class Pile (InstanceCollection):
     def __init__(
             self,
             tasks: List[Task],
@@ -74,47 +75,6 @@ class Pile:
         """
         self.instances.extend(task.instances)
         self._ensure_consistent_construction()
-
-
-
-    def __len__(self) -> int:
-        """Return the number of Instances in the Pile.
-
-        Args:
-            None
-
-        Raises:
-            None
-
-        Returns:
-            int: Number of Instances in the Pile.
-        """
-        return len(self.instances)
-
-
-
-    def __getitem__(self, index):
-        """Return the Instance or a slice of Instances at the specified index.
-
-        Args:
-            index (int or slice): Index or slice of the Instance.
-
-        Raises:
-            IndexError: If the index is out of range.
-
-        Returns:
-            Instance or List[Instance]: The Instance or list of Instances at the given index.
-        """
-        if isinstance(index, int):
-            # Handling single index
-            if index >= len(self.instances) or index < 0:
-                raise IndexError("Index out of range")
-            return self.instances[index]
-        elif isinstance(index, slice):
-            # Handling slice object
-            return self.instances[index]
-        else:
-            raise TypeError("Invalid argument type")
 
 
 

@@ -4,6 +4,7 @@ import os
 import logging
 #
 from nutcracker.data.instance import Instance
+from nutcracker.data.instance_collection import InstanceCollection
 #
 #
 from huggingface_hub import hf_hub_download
@@ -11,7 +12,7 @@ import yaml
 #
 #
 #
-class Task:
+class Task (InstanceCollection):
     def __init__(
             self, 
             test_path: str,
@@ -155,47 +156,6 @@ class Task:
 
         # Initialize and return the Task object
         return cls(test_path=test_path, example_path=example_path, config_path=config_path)
-
-
-
-    def __len__(self) -> int:
-        """Return the number of instances in the task.
-
-        Args:
-            None
-        
-        Raises:
-            None
-        
-        Returns:
-            int: Number of test instances in the task.
-        """
-        return len(self.instances)
-
-
-
-    def __getitem__(self, index):
-        """Return the Instance or a slice of Instances at the specified index.
-
-        Args:
-            index (int or slice): Index or slice of the Instance.
-
-        Raises:
-            IndexError: If the index is out of range.
-
-        Returns:
-            Instance or List[Instance]: The Instance or list of Instances at the given index.
-        """
-        if isinstance(index, int):
-            # Handling single index
-            if index >= len(self.instances) or index < 0:
-                raise IndexError("Index out of range")
-            return self.instances[index]
-        elif isinstance(index, slice):
-            # Handling slice object
-            return self.instances[index]
-        else:
-            raise TypeError("Invalid argument type")
     
 
 
