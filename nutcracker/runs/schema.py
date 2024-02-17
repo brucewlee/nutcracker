@@ -15,17 +15,6 @@ class Schema:
         other_params: Optional[Dict] = None
     ) -> None:
         """Initialize a Schema object.
-
-        Args:
-            model_config (Dict): Configuration for the model.
-            data (Union[Instance, Task, Pile, List[Instance]]): The data which can be an Instance, Task, Pile, or a list of Instances.
-            other_params (Optional[Dict], optional): Other setup related parameters. Defaults to None.
-
-        Raises:
-            None
-
-        Returns:
-            None
         """
         self.model = model
         self.other_params = other_params or {}

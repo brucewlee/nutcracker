@@ -1,4 +1,7 @@
-# Nutcracker: *Lightening Fast LLM Evaluation*
+# Nutcracker
+LLM Evaluation, like LM-Eval-Harness but more straightforward data management
+
+---
 
 ## Installation
 
