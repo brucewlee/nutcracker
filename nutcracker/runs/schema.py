@@ -70,8 +70,12 @@ class Schema:
         Returns:
             None
         """
-        for instance in TqdmLoggingHandler(self.instances, logger=self.logger, desc="Processing Instances"):
-            instance.model_response = self.model.respond(instance.user_prompt)
+        if self.logger.getEffectiveLevel() <= logging.INFO:
+            for instance in TqdmLoggingHandler(self.instances, logger=self.logger, desc="Processing Instances"):
+                instance.model_response = self.model.respond(instance.user_prompt)
+        else:
+            for instance in self.instances:
+                instance.model_response = self.model.respond(instance.user_prompt)
 
 
 

@@ -7,7 +7,6 @@ from nutcracker.data.instance import Instance
 from nutcracker.data.instance_collection import InstanceCollection
 #
 #
-from huggingface_hub import hf_hub_download
 import yaml
 #
 #

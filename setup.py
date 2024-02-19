@@ -5,15 +5,13 @@ from setuptools import find_packages
 # pip install -e .
 setup(
     name = 'nutcracker',  
-    version='0.0.1a4',
+    version='0.0.1a5',
     description = 'In Development',
     author = 'Bruce W. Lee',
     author_email = 'bruce@walnutresearch.com', 
     packages=find_packages(),
     keywords='Evaluation',
     install_requires=[
-          'huggingface_hub>=0.19.4',
-          'litellm>=1.11.0',
           'pyyaml>=6.0.1',
           'openai>=1.10.0'
       ],
