@@ -12,7 +12,7 @@ import yaml
 #
 #
 #
-class Task (InstanceCollection):
+class Task(InstanceCollection):
     def __init__(
             self, 
             test_path: str,
@@ -68,7 +68,7 @@ class Task (InstanceCollection):
         library_dir = os.path.dirname(os.path.abspath(__file__))
         # Construct the path to the config file relative to the library directory
         config_path = os.path.join(library_dir, "data_config", "task", f"{task_name}.yaml")
-        print(config_path)
+        #print(config_path)
         if not os.path.exists(config_path):
             raise FileNotFoundError(f"Config file for task name '{task_name}' not found at {config_path}")
         # Load task config
@@ -85,68 +85,6 @@ class Task (InstanceCollection):
         test_path, example_path, config_path = None, None, None
         for file_key, file_name in task_config['filename'].items():
             local_file_path = os.path.join(local_task_path, file_name)
-            if file_key == 'test':
-                test_path = local_file_path
-            elif file_key == 'dev':
-                example_path = local_file_path
-            elif file_key == 'config':
-                config_path = local_file_path
-
-        # Initialize and return the Task object
-        return cls(test_path=test_path, example_path=example_path, config_path=config_path)
-
-
-
-    @classmethod
-    def load_from_id(cls, task_id: str, user_given_directory: str):
-        """(Not Supported due to Cloud Computing Restrictions) Class method to initialize a Task object from a task ID.
-
-        Args:
-            task_id (str): The task ID, e.g., 'mmlu-abstract-algebra'.
-            user_given_directory (str): The local directory to save the downloaded files.
-
-        Returns:
-            Task: An initialized Task object.
-        """
-        cls.logger = logging.getLogger(__name__)
-         # Determine the directory of the current script in the library
-        library_dir = os.path.dirname(os.path.abspath(__file__))
-
-        # Construct the path to the config file relative to the library directory
-        config_path = os.path.join(library_dir, "data_config", "task", f"{task_id}.yaml")
-
-        if not os.path.exists(config_path):
-            raise FileNotFoundError(f"Config file for task ID '{task_id}' not found at {config_path}")
-        
-        # Load task config
-        with open(config_path, 'r') as file:
-            task_config = yaml.safe_load(file)
-
-        repo_id = task_config['repo_id']
-        local_task_path = os.path.join(user_given_directory, task_id)
-
-        # Ensure local task directory exists
-        if not os.path.exists(local_task_path):
-            os.makedirs(local_task_path)
-        
-        example_path = None
-        # Download files from Hugging Face if they don't exist locally
-        #test_path, example_path, config_path = None, None, None
-        for file_key, file_name in task_config['filename'].items():
-            local_file_path = os.path.join(local_task_path, file_name)
-            if not os.path.exists(local_file_path):
-                hf_hub_download(
-                    repo_id=repo_id, 
-                    repo_type=task_config['repo_type'],
-                    revision='main',
-                    filename=file_name, 
-                    local_dir=local_task_path,
-                    local_dir_use_symlinks=False
-                )
-                cls.logger.info(f"Downloaded {file_name} to {local_file_path}")
-            else:
-                cls.logger.info(f"File {file_name} already exists at {local_file_path}")
-
             if file_key == 'test':
                 test_path = local_file_path
             elif file_key == 'dev':
@@ -261,7 +199,7 @@ class Task (InstanceCollection):
         
         # check if number of few-shot is smaller than length of examples
         if self.config['few_shot'] > len(self.example_data_list):
-            print(len(self.example_data_list))
+            #print(len(self.example_data_list))
             raise ValueError("Number of few-shot examples is larger than the number of examples available.")
         
         # check if config contains all necessary keys

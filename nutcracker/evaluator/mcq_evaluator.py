@@ -1,6 +1,8 @@
 from typing import List, Set
+import logging
 #
 from nutcracker.data.instance import MCQInstance
+from nutcracker.utils import TqdmLoggingHandler
 #
 #
 from openai import OpenAI
@@ -8,29 +10,35 @@ from openai import OpenAI
 #
 #
 class MCQEvaluator:
-    def __init__(self, data: List[MCQInstance], evaluation_method: str = "rule-matching") -> None:
+    def __init__(self, data: List[MCQInstance], disable_intent_matching: bool = False) -> None:
         self.data = data
-        self.evaluation_method = evaluation_method
+        self.disable_intent_matching = disable_intent_matching
+        self._control_logging()
 
 
 
-    def run(self) -> float:
+    def run(self, round_digits: int = 5) -> float:
         correct_count = 0
-        for instance in self.data:
-            if self._is_correct(instance):
+        for instance in TqdmLoggingHandler(self.data, logger=self.logger, desc="Processing Instances"):
+            is_correct = self._is_correct(instance)
+            instance.response_correct = is_correct  # Update the instance attribute here
+            if is_correct:
                 correct_count += 1
 
-        return round(correct_count / len(self.data),5) if self.data else 0.0
+        accuracy = correct_count / len(self.data) if len(self.data) > 0 else 0.0
+        return round(accuracy, round_digits) 
 
 
 
     def _is_correct(self, instance: MCQInstance) -> bool:
-        if self.evaluation_method == "rule-matching":
-            model_response_set = self._parse_model_response_rule_based(instance.model_response)
-        elif self.evaluation_method == "intent-matching":
+        # First, try rule-based parsing
+        model_response_set = self._parse_model_response_rule_based(instance.model_response)
+        
+        # If rule-based parsing fails or is ambiguous and intent matching is not disabled, use intent-matching
+        if not model_response_set and not self.disable_intent_matching:
             model_response_set = self._parse_model_response_intent_matching(instance.model_response)
-        else:
-            raise ValueError(f"Unknown evaluation method: {self.evaluation_method}")
+        elif not model_response_set:
+            return False  # Consider not rule-matched responses as wrong if intent matching is disabled
 
         correct_options_set = set(instance.correct_options)
         return model_response_set == correct_options_set
@@ -62,40 +70,39 @@ class MCQEvaluator:
     def _parse_model_response_intent_matching(response: str) -> Set[str]:
         client = OpenAI()
         few_shot = f"""
-        Example 1:
+        Examples:
+
         Response: 'The answer is A.'
         Interpretation: A
 
-        Example 2:
         Response: 'I believe B and C are correct.'
         Interpretation: B, C
 
-        Example 3:
         Response: 'Definitely D.'
         Interpretation: D
 
-        Example 4:
-        Response: 'Options A and B are incorrect, so it must be C.'
-        Interpretation: C
-
-        Example 5:
         Response: 'Although many think it's A, the correct answer is actually D.'
         Interpretation: D
 
-        Example 6:
-        Response: 'A seems right, but after further analysis, B is more accurate.'
-        Interpretation: B
+        Response: 'A seems right, but after further analysis, B and D are more accurate.'
+        Interpretation: B, D
 
-        Example 7:
+        Response: 'Question: Which of the following will cause a factory'
+        Interpretation: None
+
+        Response: 'Options A and B are incorrect, so it must be C.'
+        Interpretation: C
+
+        Response: 'Please choose the answer you think is correct and press the submit answer button.'
+        Interpretation: None
+
         Response: 'Either A or B could work, but I lean towards B.'
         Interpretation: B
 
-        Example 8:
-        Response: 'Options include A, B, C; however, C is the most plausible.'
-        Interpretation: C
+        Response: 'Question: The process of creating new concepts, ideas, and innovations is called A. invention. B. creativity. C. technology. D. entrepreneurship.? Answer: B'
+        Interpretation: None
         
-        Question:
-        Example: '{response}' 
+        Response: '{response}' 
         Interpretation: 
         """
 
@@ -111,3 +118,22 @@ class MCQEvaluator:
 
         interpreted_response = completion.choices[0].message.content.strip()
         return set(interpreted_response.split(', ')) if interpreted_response else set()
+
+    
+
+    def _control_logging(
+            self,
+        ) -> None:
+        """Control logging for Schema
+
+        Args:
+            None
+        
+        Raises:
+            None
+        
+        Returns:
+            None
+        """
+        self.logger = logging.getLogger(__name__)
+        self.logger.info(f"runnable MCQEvaluator -> created with {len(self.data.instances)} instances.")
