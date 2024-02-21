@@ -6,6 +6,11 @@
 
 LLM Evaluation, like LM-Eval-Harness but more straightforward data management
 
+
+https://github.com/brucewlee/nutcracker/assets/54278520/151403fc-217c-486c-8de6-489af25789ce
+
+
+
 ---
 
 ## Installation
@@ -159,13 +164,21 @@ for i in range (0,len(loaded_mmlu)):
 
 ##### STEP 5: Run Evaluation
 - LLMs often don’t respond in immediately recognizable letters like A, B, C, or D. 
-- Therefore, Nutcracker supports an intent-matching feature that parses model response to match discrete labels, but let’s disable that for now and proceed with our evaluation.
+- Therefore, Nutcracker supports an intent-matching feature (requires OpenAI API Key) that parses model response to match discrete labels, but let’s disable that for now and proceed with our evaluation.
+- We recommend using intent-matching for almost all use cases. We will publish a detailed research later.
+
 ```python
 from nutcracker.evaluator import MCQEvaluator, generate_report
 evaluation = MCQEvaluator(data=loaded_mmlu, disable_intent_matching=True)
 evaluation.run()
 print(generate_report(loaded_mmlu, save_path='accuracy_report.txt'))
 ```
+
+
+https://github.com/brucewlee/nutcracker/assets/54278520/6deb5362-fd48-470e-9964-c794425811d9
+
+
+
 
 ---
 
