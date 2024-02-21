@@ -4,7 +4,7 @@
 <img src="resources/w_500.png" width="200"/>
 </p>
 
-like LM-Eval-Harness but API-based evaluation + straightforward data management
+like LM-Eval-Harness but without PyTorch madness. Bring-your-own-API principles + straightforward data management
 
 
 https://github.com/brucewlee/nutcracker/assets/54278520/151403fc-217c-486c-8de6-489af25789ce
