@@ -5,7 +5,7 @@ from setuptools import find_packages
 # pip install -e .
 setup(
     name = 'nutcracker',  
-    version='0.0.1a5',
+    version='0.0.1a6',
     description = 'In Development',
     author = 'Bruce W. Lee',
     author_email = 'bruce@walnutresearch.com', 

@@ -76,6 +76,7 @@ class MCQInstance(Instance):
         self.model_response = None
         self.answers = None 
         self.response_correct = False
+        self.response_parsed = None
 
 
     

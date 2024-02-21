@@ -43,12 +43,14 @@ class MCQEvaluator:
         
         # If rule-based parsing fails or is ambiguous and intent matching is not disabled, use intent-matching
         if not found_options and not self.disable_intent_matching:
-            model_response_set = self._parse_model_response_intent_matching(instance.model_response)
+            found_options = self._parse_model_response_intent_matching(instance.model_response)
         elif not found_options:
             return False  # Consider not rule-matched responses as wrong if intent matching is disabled
 
+        instance.response_parsed = found_options
         correct_options_set = set(instance.correct_options)
-        return model_response_set == correct_options_set
+
+        return found_options == correct_options_set
 
 
 
@@ -129,17 +131,24 @@ class MCQEvaluator:
         Interpretation: 
         """
 
-        completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": 'You respond with the letter option (like A, B, D, or None) separated by commas and nothing else.'},
-                {"role": "user", "content": few_shot}
-            ],
-            seed=123456789,
-            temperature=1
-        )
+        interpreted_response = None
+        while interpreted_response is None:
+            try:
+                completion = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "user", "content": 'You respond with the letter option (like A, B, D, or None) separated by commas and nothing else.'},
+                        {"role": "user", "content": few_shot}
+                    ],
+                    seed=123456789,
+                    timeout=15,
+                    temperature=1
+                )
+                interpreted_response = completion.choices[0].message.content.strip()
+                break
+            except KeyboardInterrupt:
+                sys.exit()
 
-        interpreted_response = completion.choices[0].message.content.strip().upper()
         return set(interpreted_response.split(', ')) if interpreted_response else set()
 
     

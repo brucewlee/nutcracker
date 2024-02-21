@@ -21,8 +21,10 @@ pip install -e nutcracker
 git clone https://github.com/brucewlee/nutcracker-db
 ```
 
+---
+
 ## QuickStart
-### Case Study: Evaluate (Any) LLM API on TruthfulQA
+### Case Study: Evaluate (Any) LLM API on TruthfulQA ([Script](nutcracker/demos/demo-readme1.py))
 ##### STEP 1: Define Model
 - Define a simple model class with a "*respond(self, user_prompt)*" function. 
 - We will use OpenAI here. But really, any api can be evaluated if the "*respond(self, user_prompt)*" function that returns LLM response in string exists. Get creative (Hugginface API, Anthropic API, Replicate API, OLLaMA, and etc.)
@@ -87,7 +89,9 @@ for i in range (0, len(truthfulqa)):
 print(generate_report(truthfulqa, save_path='accuracy_report.txt'))
 ```
 
-### Case Study: Task vs. Pile? Evaluating LLaMA on MMLU
+---
+
+### Case Study: Task vs. Pile? Evaluating LLaMA on MMLU ([Script](nutcracker/demos/demo-readme2.py))
 ##### STEP 1: Understand the basis of Nutcracker
 - Despite our lengthy history of model evaluation, my understanding of the field is that we have not reached a clear consensus on what a "benchmark" is (*Is MMLU a "benchmark"? Is Huggingface Open LLM leaderboard a "benchmark"?*). 
 - Instead of using the word benchmark, Nutcracker divides the data structure into Instance, Task, and Pile (See blog post: [HERE](https://brucewlee.medium.com/nutcracker-instance-task-pile-38f646c1b36d))
@@ -163,6 +167,8 @@ evaluation.run()
 print(generate_report(loaded_mmlu, save_path='accuracy_report.txt'))
 ```
 
-## Tutorials
+---
+
+## Other Tutorials
 - Evaluating on HuggingFace Inference Endpoints -> [HERE / Medium](https://brucewlee.medium.com/nutcracker-evaluating-on-huggingface-inference-endpoints-6e977e326c5b)
 - Understanding Instance-Task-Pile -> [HERE / Medium](https://brucewlee.medium.com/nutcracker-instance-task-pile-38f646c1b36d)
