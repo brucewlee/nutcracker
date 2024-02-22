@@ -26,6 +26,8 @@ pip install -e nutcracker
 git clone https://github.com/brucewlee/nutcracker-db
 ```
 
+Check all tasks implemented in [Nutcracker DB](https://github.com/brucewlee/nutcracker-db)'s readme page.
+
 ---
 
 ## QuickStart

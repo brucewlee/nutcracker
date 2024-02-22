@@ -52,7 +52,7 @@ mmlu.save_to_file('mmlu-llama.pkl')
 loaded_mmlu = Pile.load_from_file('mmlu-llama.pkl')
 
 from nutcracker.evaluator import MCQEvaluator, generate_report
-evaluation = MCQEvaluator(data=loaded_mmlu, disable_intent_matching=False)
+evaluation = MCQEvaluator(data=loaded_mmlu, disable_intent_matching=True)
 evaluation.run()
 
 for i in range (0,len(loaded_mmlu)):
