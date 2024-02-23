@@ -32,6 +32,10 @@ class Instance:
             # example_data_list can be empty for zero-shot evaluation
             example_data_list = kwargs.get('example_data_list')
             return MCQInstance(config, test_data, example_data_list)
+        elif config['construction']['class'].lower().strip() == "frq":
+            # example_data_list can be empty for zero-shot evaluation
+            example_data_list = kwargs.get('example_data_list')
+            return FRQInstance(config, test_data, example_data_list)
         else:
             raise ValueError("Invalid instance construction")
 
@@ -74,7 +78,6 @@ class MCQInstance(Instance):
         # below are derivational attributes that will be updated during code run
         self.user_prompt = self._format_user_prompt()
         self.model_response = None
-        self.answers = None 
         self.response_correct = False
         self.response_parsed = None
 
@@ -156,6 +159,77 @@ class MCQInstance(Instance):
                             options=self.options,
                             correct_options=self.correct_options
                         )
+
+        # if user prompt is empty, raise error
+        if not user_prompt:
+            raise ValueError("Invalid user prompt template")
+
+        return user_prompt
+
+
+
+class FRQInstance(Instance):
+    def __init__(
+            self, 
+            config: dict, 
+            test_data: dict, 
+            example_data_list: List[dict] = None
+        ) -> None:
+        """`FRQInstance` constructor.
+        
+        Args:
+            config (dict): Configuration for the instance.
+            test_data (dict): Test data for the instance.
+            example_data_list (List[dict], optional): List of example data. Defaults to None.
+            
+        Raises:
+            None
+
+        Returns:
+            None
+        """
+        # task-level attributes
+        self.config = config
+        self.example_data_list = example_data_list # not a list of Instance, just a list of dicts
+
+        # below are attributes that are initialized from data
+        self.centerpiece = test_data["centerpiece"]
+        self.answer = test_data["answer"]
+
+        # below are derivational attributes that will be updated during code run
+        self.user_prompt = self._format_user_prompt()
+        self.model_response = None
+        self.response_correct = False
+        self.response_parsed = None
+
+
+    
+    def _format_user_prompt(self) -> str:
+        """Format the user prompt.
+
+        Args:
+            None
+
+        Raises:
+            ValueError: If the user prompt template is invalid.
+
+        Returns:
+            str: Formatted user prompt.
+        """
+        user_prompt = ""
+
+        for key, value in self.config['user_prompt_template'].items():
+            if value:
+                if key == 'example':
+                    for example_data in self.example_data_list[:self.config['few_shot']]:
+                        user_prompt += value.format(
+                            centerpiece=example_data['centerpiece'],
+                            answer=example_data['answer']
+                        )                
+                else:
+                    user_prompt += value.format(
+                        centerpiece=self.centerpiece,
+                    )
 
         # if user prompt is empty, raise error
         if not user_prompt:

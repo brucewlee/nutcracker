@@ -1,2 +1,3 @@
 from nutcracker.evaluator.mcq_evaluator import MCQEvaluator
+from nutcracker.evaluator.frq_evaluator import FRQEvaluator
 from nutcracker.evaluator.reporter import generate_report
