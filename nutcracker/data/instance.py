@@ -194,7 +194,7 @@ class FRQInstance(Instance):
 
         # below are attributes that are initialized from data
         self.centerpiece = test_data["centerpiece"]
-        self.answer = test_data["answer"]
+        self.correct_options = test_data["correct_options"]
 
         # below are derivational attributes that will be updated during code run
         self.user_prompt = self._format_user_prompt()
@@ -224,7 +224,7 @@ class FRQInstance(Instance):
                     for example_data in self.example_data_list[:self.config['few_shot']]:
                         user_prompt += value.format(
                             centerpiece=example_data['centerpiece'],
-                            answer=example_data['answer']
+                            correct_options=example_data['correct_options']
                         )                
                 else:
                     user_prompt += value.format(

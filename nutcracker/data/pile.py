@@ -70,12 +70,18 @@ class Pile (InstanceCollection):
         tasks = []
 
         if ',' in task_names:
+            # cases like task_name: mmlu-*, hellaswag, arc-challenge, truthfulqa-mc1, winogrande, gsm8k
             # Specific tasks listed, load each by name
             for task_name in task_names.split(','):
-                task_config_path = os.path.join(library_dir, "data_config", "task", f"{task_name}.yaml")
-                task = Task.load_from_db(task_name, db_directory)
-                tasks.append(task)
+                task_name = task_name.strip()
+                # Pattern given, load all tasks matching the pattern
+                for task_config_path in glob.glob(os.path.join(library_dir, "data_config", "task", f"{task_name}.yaml")):
+                    task_name = os.path.basename(task_config_path).replace('.yaml', '')
+                    task = Task.load_from_db(task_name, db_directory)
+                    tasks.append(task)
         else:
+            # cases like task_name: mmlu-*
+            task_names = task_names.strip()
             # Pattern given, load all tasks matching the pattern
             for task_config_path in glob.glob(os.path.join(library_dir, "data_config", "task", f"{task_names}.yaml")):
                 task_name = os.path.basename(task_config_path).replace('.yaml', '')

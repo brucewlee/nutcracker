@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Union
 from collections import defaultdict
 #
-from nutcracker.data.instance import MCQInstance
+from nutcracker.data.instance import MCQInstance, FRQInstance
 #
-
+#
 class Color:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -15,7 +15,7 @@ class Color:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def generate_report(data: List[MCQInstance], save_path: str = None, rounding_precision: int = 2) -> None:
+def generate_report(data: List[Union[MCQInstance, FRQInstance]], save_path: str = None, rounding_precision: int = 4) -> None:
     task_results = defaultdict(lambda: {'correct': 0, 'total': 0, 'details': None})
     total_correct = 0
     total_instances = 0
@@ -41,16 +41,31 @@ def generate_report(data: List[MCQInstance], save_path: str = None, rounding_pre
         few_shot = details.get('few_shot', 'N/A')
         language = details.get('language', 'N/A')
         
+        # Handle construction class-specific wording
+        if construction.get('class') == 'frq':
+            construction_desc = f"Class: {Color.OKCYAN}frq (Free Response Questions)"
+            construction_desc_2 = f"Style: {Color.OKCYAN}{construction.get('type', 'Unknown')}"
+        elif construction.get('class') == 'mcq':
+            construction_desc = f"Class: {Color.OKCYAN}mcq (Multiple Choice Questions)"
+            construction_desc_2 = f"Choices: {Color.OKCYAN}{construction.get('n_choices', 'Unknown')}"
+        else:
+            construction_desc = "Unknown Construction"
+            construction_desc_2 = "Unknown Construction"
+        
         report_lines.append(f"{Color.BOLD}Task: {Color.UNDERLINE}{task_name}{Color.ENDC}")
-        report_lines.append(f"Construction: {Color.OKCYAN}{construction.get('class', 'Unknown')} ({construction.get('n_choices', 'Unknown')} choices){Color.ENDC}")
-        report_lines.append(f"Few-shot: {Color.OKCYAN}{few_shot}{Color.ENDC}, Language: {Color.OKCYAN}{language}{Color.ENDC}")
-        report_lines.append(f"{Color.OKGREEN}Correct: {results['correct']}/{results['total']} ({accuracy_percentage:.{rounding_precision}f}%)")
-        report_lines.append(f"{Color.BOLD}{Color.FAIL}Accuracy: {raw_accuracy:.{rounding_precision}f}")
+        report_lines.append(f"{Color.BOLD}Construction: {Color.ENDC}")
+        report_lines.append(f"{Color.BOLD}  - {construction_desc}{Color.ENDC}")
+        report_lines.append(f"{Color.BOLD}  - {construction_desc_2}{Color.ENDC}")
+
+        report_lines.append(f"{Color.BOLD}Few-shot: {Color.OKCYAN}{few_shot}{Color.ENDC}{Color.ENDC}")
+        report_lines.append(f"{Color.BOLD}Language: {Color.OKCYAN}{language}{Color.ENDC}")
+        report_lines.append(f"{Color.BOLD}{Color.OKGREEN}Correct: {results['correct']}/{results['total']} ({accuracy_percentage:.2f}%)")
+        report_lines.append(f"{Color.BOLD}{Color.FAIL}Raw Accuracy: {raw_accuracy:.{rounding_precision}f}")
         report_lines.append(f"{'-' * 60}{Color.ENDC}\n")
 
     pile_average_accuracy = sum(accuracies) / len(accuracies) if accuracies else 0.0
     report_lines.append(f"{Color.BOLD}{Color.WARNING}Unique Tasks Found: {len(task_results)}{Color.ENDC}\n")
-    report_lines.append(f"{Color.BOLD}{Color.WARNING}Average Accuracy: {pile_average_accuracy:.{rounding_precision}f}%{Color.ENDC}\n")
+    report_lines.append(f"{Color.BOLD}{Color.WARNING}Average Accuracy: {pile_average_accuracy:.2f}%{Color.ENDC}\n")
     report = "\n".join(report_lines)
 
     # Optionally save to file
@@ -62,6 +77,7 @@ def generate_report(data: List[MCQInstance], save_path: str = None, rounding_pre
 
     # Return the colored report for in-console display if needed
     return report
+
 
 # To use this enhanced report generator, simply pass a list of MCQInstance objects along with an optional save path and rounding precision.
 # generate_accuracy_report(data, save_path='accuracy_report.txt', rounding_precision=2)

@@ -1,94 +1,40 @@
-from typing import List, Set, Optional
+from typing import List, Set, Optional, Union
 import logging
 #
+from nutcracker.data.task import Task
+from nutcracker.data.pile import Pile
 from nutcracker.data.instance import FRQInstance
 from nutcracker.utils import TqdmLoggingHandler
-#
-#
-from openai import OpenAI
-#
+from nutcracker.evaluator.engines.frq_engine_alpha import FRQEngineAlpha
 #
 #
 class FRQEvaluator:
-    def __init__(self, data: List[FRQInstance]) -> None:
+    def __init__(
+        self, data: Union[Pile, Task, List[FRQInstance]], engine: str = 'alpha', **engine_kwargs) -> None:
         self.data = data
+        if engine == 'alpha' or engine == 'latest':
+            self.engine = FRQEngineAlpha(**engine_kwargs)
         self._control_logging()
 
 
 
-    def run(self, round_digits: int = 5) -> float:
+    def run(self, round_digits: int = 5, called_from_auto = False) -> float:
         correct_count = 0
-        if self.logger.getEffectiveLevel() <= logging.INFO:
+        if self.logger.getEffectiveLevel() <= logging.INFO and called_from_auto == False:
             for instance in TqdmLoggingHandler(self.data, logger=self.logger, desc="Processing Instances"):
-                is_correct = self._is_correct(instance)
+                is_correct = self.engine.is_correct(instance)
                 instance.response_correct = is_correct  # Update the instance attribute here
                 if is_correct:
                     correct_count += 1
         else:
             for instance in self.data:
-                is_correct = self._is_correct(instance)
+                is_correct = self.engine.is_correct(instance)
                 instance.response_correct = is_correct  # Update the instance attribute here
                 if is_correct:
                     correct_count += 1
 
         accuracy = correct_count / len(self.data) if len(self.data) > 0 else 0.0
         return round(accuracy, round_digits) 
-
-
-
-    def _is_correct(self, instance: FRQInstance) -> bool:
-        found_options = self._parse_model_response_intent_matching(instance.model_response, instance.answer)
-
-        instance.response_parsed = found_options
-        if 'true' in found_options.lower() and 'false' not in found_options.lower():
-            return True
-        elif 'true' not in found_options.lower() and 'false' in found_options.lower():
-            return False
-        else:
-            return False
-
-
-
-    @staticmethod
-    def _parse_model_response_intent_matching(response: str, answer: str) -> Set[str]:
-        client = OpenAI()
-        few_shot = f"""
-        Your job is: given a response, determine if the answer is correct or not. Say True or False and nothing else.
-
-        Examples:
-        
-        Answer: '\\frac{625}{648}'
-        Response: 'It's 625/648.'
-        Interpretation: True
-
-        Answer: '\\frac{2}{5}'
-        Response: 'It's 4/6'
-        Interpretation: False
-        
-        Answer: '{answer}'
-        Response: '{response}'
-        Interpretation: 
-        """
-
-        interpreted_response = None
-        while interpreted_response is None:
-            try:
-                completion = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "user", "content": 'You respond with True or False and nothing else.'},
-                        {"role": "user", "content": few_shot}
-                    ],
-                    seed=123456789,
-                    timeout=15,
-                    temperature=1
-                )
-                interpreted_response = completion.choices[0].message.content.strip()
-                break
-            except KeyboardInterrupt:
-                sys.exit()
-        print(interpreted_response)
-        return interpreted_response
 
     
 
@@ -107,4 +53,8 @@ class FRQEvaluator:
             None
         """
         self.logger = logging.getLogger(__name__)
-        self.logger.info(f"runnable FRQEvaluator -> created with {len(self.data.instances)} instances.")
+        try:
+            self.logger.info(f"runnable FRQEvaluator -> created with {len(self.data.instances)} instances.")
+        except AttributeError:
+            # happens when data is just a list of instances
+            self.logger.info(f"runnable FRQEvaluator -> created with {len(self.data)} instances.")
