@@ -17,6 +17,8 @@ setup(
           'pyyaml>=6.0.1',
           'openai>=1.10.0'
       ],
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     include_package_data=True,
     package_data={'nutcracker': ['*']}
 )
