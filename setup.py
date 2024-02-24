@@ -7,7 +7,7 @@ from setuptools import find_packages
 # git push --tags    
 setup(
     name = 'nutcracker-py',  
-    version='{{VERSION_PLACEHOLDER}}',
+    version='0.0.1a15',
     description = 'streamline LLM evaluation',
     author = 'Bruce W. Lee',
     author_email = 'bruce@walnutresearch.com', 
