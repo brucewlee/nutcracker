@@ -2,7 +2,6 @@ from setuptools import setup, find_packages
 import subprocess
 
 def _get_version_hash():
-  """Talk to git and find out the tag/hash of our latest commit"""
     try:
         p = subprocess.Popen(["git", "describe",
                                 "--tags", "--dirty", "--always"],
