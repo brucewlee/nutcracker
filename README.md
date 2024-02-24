@@ -11,7 +11,19 @@ https://github.com/brucewlee/nutcracker/assets/54278520/151403fc-217c-486c-8de6-
 
 ## Installation
 
+### PyPI (Recommended)
 **Install Nutcracker**
+```bash
+git clone https://github.com/brucewlee/nutcracker
+pip install -e nutcracker
+```
+
+**Download Nutcracker DB**
+```bash
+git clone https://github.com/brucewlee/nutcracker-db
+```
+
+### PyPI (Recommended)
 ```bash
 git clone https://github.com/brucewlee/nutcracker
 pip install -e nutcracker
