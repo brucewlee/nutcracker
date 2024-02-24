@@ -47,7 +47,7 @@ class InstanceCollection:
 
 
 
-    def sample(self, n: int, seed: Optional[int] = None, in_place: bool = ) -> Optional[list]:
+    def sample(self, n: int, seed: Optional[int] = None, in_place: bool = False) -> Optional[list]:
         """
         Randomly sample 'n' instances from the collection. Optionally modify the collection in place.
 
