@@ -72,10 +72,7 @@ class InstanceCollection:
             self.instances = [self.instances[i] for i in sampled_indices]
             return None
         else:
-            # Create a new instance of the class and assign the sampled instances to it.
-            new_collection = self.__class__()
-            new_collection.instances = [self.instances[i] for i in sampled_indices]
-            return new_collection
+            return [self.instances[i] for i in sampled_indices]
 
 
 
