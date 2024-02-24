@@ -9,8 +9,9 @@ def _get_version_hash():
     except EnvironmentError:
         print("Couldn't run git to get a version number for setup.py")
         return None
+
     ver = p.communicate()[0]
-    return ver.strip()
+    return ver.decode('utf-8').strip().replace('-dirty','')
 
 # python setup.py sdist
 # python -m twine upload dist/*
