@@ -47,7 +47,7 @@ class InstanceCollection:
 
 
 
-    def sample(self, n: int, seed: Optional[int] = None, in_place: bool = False) -> Optional[list]:
+    def sample(self, n: int, seed: Optional[int] = None, in_place: bool = ) -> Optional[list]:
         """
         Randomly sample 'n' instances from the collection. Optionally modify the collection in place.
 
@@ -72,7 +72,10 @@ class InstanceCollection:
             self.instances = [self.instances[i] for i in sampled_indices]
             return None
         else:
-            return [self.instances[i] for i in sampled_indices]
+            # Create a new instance of the class and assign the sampled instances to it.
+            new_collection = self.__class__()
+            new_collection.instances = [self.instances[i] for i in sampled_indices]
+            return new_collection
 
 
 
