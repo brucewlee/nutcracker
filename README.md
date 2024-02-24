@@ -9,13 +9,12 @@ https://github.com/brucewlee/nutcracker/assets/54278520/151403fc-217c-486c-8de6-
 
 ---
 
-## Installation
+# Installation
 
-### PyPI (Recommended)
+### Route 1. PyPI (Recommended)
 **Install Nutcracker**
 ```bash
-git clone https://github.com/brucewlee/nutcracker
-pip install -e nutcracker
+pip install nutcracker
 ```
 
 **Download Nutcracker DB**
@@ -23,7 +22,8 @@ pip install -e nutcracker
 git clone https://github.com/brucewlee/nutcracker-db
 ```
 
-### PyPI (Recommended)
+### Route 2. GitHub
+**Install Nutcracker**         
 ```bash
 git clone https://github.com/brucewlee/nutcracker
 pip install -e nutcracker
@@ -38,7 +38,7 @@ Check all tasks implemented in [Nutcracker DB](https://github.com/brucewlee/nutc
 
 ---
 
-## QuickStart
+# QuickStart
 ### Case Study: Evaluate (Any) LLM API on TruthfulQA ([Script](nutcracker/demos/demo-readme1.py))
 ##### STEP 1: Define Model
 - Define a simple model class with a "*respond(self, user_prompt)*" function. 
@@ -192,6 +192,6 @@ https://github.com/brucewlee/nutcracker/assets/54278520/6deb5362-fd48-470e-9964-
 
 ---
 
-## Other Tutorials
+# Tutorials
 - Evaluating on HuggingFace Inference Endpoints -> [HERE / Medium](https://brucewlee.medium.com/nutcracker-evaluating-on-huggingface-inference-endpoints-6e977e326c5b)
 - Understanding Instance-Task-Pile -> [HERE / Medium](https://brucewlee.medium.com/nutcracker-instance-task-pile-38f646c1b36d)
