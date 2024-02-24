@@ -1,4 +1,5 @@
-from setuptools import setup, find_packages
+from distutils.core import setup
+from setuptools import find_packages
 import subprocess
 
 def _get_version_hash():
