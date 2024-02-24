@@ -1,5 +1,7 @@
 from distutils.core import setup
 from setuptools import find_packages
+from version import get_git_version
+
 # python setup.py sdist
 # python -m twine upload dist/*
 # pip install -e .
@@ -7,7 +9,7 @@ from setuptools import find_packages
 # git push --tags    
 setup(
     name = 'nutcracker-py',  
-    version='0.0.1a15',
+    version=get_git_version(),
     description = 'streamline LLM evaluation',
     author = 'Bruce W. Lee',
     author_email = 'bruce@walnutresearch.com', 
