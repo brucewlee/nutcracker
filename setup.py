@@ -1,6 +1,17 @@
-from distutils.core import setup
-from setuptools import find_packages
-from version import get_git_version
+from setuptools import setup, find_packages
+import subprocess
+
+def _get_version_hash():
+  """Talk to git and find out the tag/hash of our latest commit"""
+  try:
+        p = subprocess.Popen(["git", "describe",
+                              "--tags", "--dirty", "--always"],
+                             stdout=subprocess.PIPE)
+    except EnvironmentError:
+        print("Couldn't run git to get a version number for setup.py")
+        return
+    ver = p.communicate()[0]
+    return ver.strip()
 
 # python setup.py sdist
 # python -m twine upload dist/*
@@ -9,7 +20,8 @@ from version import get_git_version
 # git push --tags    
 setup(
     name = 'nutcracker-py',  
-    version=get_git_version(),
+    version=_get_version_hash(),
+    setup_requires="setupmeta",
     description = 'streamline LLM evaluation',
     author = 'Bruce W. Lee',
     author_email = 'bruce@walnutresearch.com', 
