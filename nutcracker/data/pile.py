@@ -149,3 +149,33 @@ class Pile (InstanceCollection):
             if len(constructions) > 1:
                 error_msg = f"Detected constructions are: {', '.join(constructions)}"
                 raise ValueError(error_msg)
+    
+
+
+    @staticmethod
+    def list_all() -> list:
+        """
+        List all available pile names based on the YAML configuration files in the data_config/pile directory.
+
+        Args:
+            data_config_directory (str): The path to the data_config directory containing pile configurations.
+
+        Returns:
+            list: A list of pile names available in the data_config/pile directory.
+        """
+        # Determine the directory of the current script in the library
+        library_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the path to the config file relative to the library directory
+        config_path = os.path.join(library_dir, "data_config")
+
+        # Construct the path to the pile configurations directory
+        piles_config_path = os.path.join(config_path, "pile")
+        
+        # Use glob to find all YAML files in the directory
+        pile_config_files = glob.glob(os.path.join(piles_config_path, "*.yaml"))
+        
+        # Extract the pile names from the filenames
+        pile_names = [os.path.basename(filename).replace('.yaml', '') for filename in pile_config_files]
+        
+        return pile_names

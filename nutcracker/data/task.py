@@ -2,6 +2,7 @@ from typing import Optional
 import json
 import os
 import logging
+import glob
 #
 from nutcracker.data.instance import Instance
 from nutcracker.data.instance_collection import InstanceCollection
@@ -209,3 +210,30 @@ class Task(InstanceCollection):
     
 
 
+    @staticmethod
+    def list_all() -> list:
+        """
+        List all available task names based on the YAML configuration files in the data_config/task directory.
+
+        Args:
+            data_config_directory (str): The path to the data_config directory containing task configurations.
+
+        Returns:
+            list: A list of task names available in the data_config/task directory.
+        """
+        # Determine the directory of the current script in the library
+        library_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the path to the config file relative to the library directory
+        config_path = os.path.join(library_dir, "data_config")
+
+        # Construct the path to the task configurations directory
+        tasks_config_path = os.path.join(config_path, "task")
+        
+        # Use glob to find all YAML files in the directory
+        task_config_files = glob.glob(os.path.join(tasks_config_path, "*.yaml"))
+        
+        # Extract the task names from the filenames
+        task_names = [os.path.basename(filename).replace('.yaml', '') for filename in task_config_files]
+        
+        return task_names
