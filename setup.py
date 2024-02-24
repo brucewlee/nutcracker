@@ -4,9 +4,9 @@ from setuptools import find_packages
 # python -m twine upload dist/*
 # pip install -e .
 setup(
-    name = 'nutcracker',  
-    version='0.0.1a7',
-    description = 'In Development',
+    name = 'nutcracker-py',  
+    version='{{VERSION_PLACEHOLDER}}',,
+    description = 'streamline LLM evaluation',
     author = 'Bruce W. Lee',
     author_email = 'bruce@walnutresearch.com', 
     packages=find_packages(),
