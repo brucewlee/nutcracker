@@ -3,13 +3,13 @@ import subprocess
 
 def _get_version_hash():
   """Talk to git and find out the tag/hash of our latest commit"""
-  try:
+    try:
         p = subprocess.Popen(["git", "describe",
-                              "--tags", "--dirty", "--always"],
-                             stdout=subprocess.PIPE)
+                                "--tags", "--dirty", "--always"],
+                                stdout=subprocess.PIPE)
     except EnvironmentError:
         print("Couldn't run git to get a version number for setup.py")
-        return
+        return None
     ver = p.communicate()[0]
     return ver.strip()
 
