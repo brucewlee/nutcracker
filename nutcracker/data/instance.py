@@ -80,7 +80,8 @@ class MCQInstance(Instance):
         self.model_response = None
         self.model_response_logprobs = None
         self.response_correct = False
-        self.response_parsed = None
+        self.response_evaluator = False
+
 
     
     def _format_user_prompt(self) -> str:
@@ -201,7 +202,7 @@ class FRQInstance(Instance):
         self.model_response = None
         self.model_response_logprobs = None
         self.response_correct = False
-        self.response_parsed = None
+        self.response_evaluator_engine = None
 
 
     

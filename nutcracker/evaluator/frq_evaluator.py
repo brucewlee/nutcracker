@@ -13,6 +13,7 @@ class FRQEvaluator:
         self, data: Union[Pile, Task, List[FRQInstance]], engine: str = 'alpha', **engine_kwargs) -> None:
         self.data = data
         if engine == 'alpha' or engine == 'recommended':
+            self.response_evaluator_engine = 'frq-engine-alpha'
             self.engine = FRQEngineAlpha(**engine_kwargs)
         self._control_logging()
 
@@ -23,6 +24,7 @@ class FRQEvaluator:
         for instance in TqdmLoggingHandler(self.data, logger=self.logger, desc="Processing Instances"):
             is_correct = self.engine.is_correct(instance)
             instance.response_correct = is_correct  # Update the instance attribute here
+            instance.response_evaluator_engine = self.response_evaluator_engine # fingerprint
             if is_correct:
                 correct_count += 1
 

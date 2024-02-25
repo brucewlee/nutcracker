@@ -15,12 +15,16 @@ class MCQEvaluator:
     def __init__(self, data: Union[Pile, Task, List[MCQInstance]], engine: str = 'alpha', **engine_kwargs) -> None:
         self.data = data
         if engine == 'alpha':
+            self.response_evaluator_engine = 'mcq-engine-alpha'
             self.engine = MCQEngineAlpha(**engine_kwargs)
         elif engine == 'beta':
+            self.response_evaluator_engine = 'mcq-engine-beta'
             self.engine = MCQEngineBeta(**engine_kwargs)
         elif engine == 'gamma':
+            self.response_evaluator_engine = 'mcq-engine-gamma'
             self.engine = MCQEngineGamma(**engine_kwargs)
         elif engine == 'zeta' or engine == 'recommended':
+            self.response_evaluator_engine = 'mcq-engine-zeta'
             self.engine = MCQEngineZeta(**engine_kwargs)
         self._control_logging()
 
@@ -31,6 +35,7 @@ class MCQEvaluator:
         for instance in TqdmLoggingHandler(self.data, logger=self.logger, desc="Processing Instances"):
             is_correct = self.engine.is_correct(instance)
             instance.response_correct = is_correct  # Update the instance attribute here
+            instance.response_evaluator_engine = self.response_evaluator_engine # fingerprint
             if is_correct:
                 correct_count += 1
 
