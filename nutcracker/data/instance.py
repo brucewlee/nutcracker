@@ -78,9 +78,9 @@ class MCQInstance(Instance):
         # below are derivational attributes that will be updated during code run
         self.user_prompt = self._format_user_prompt()
         self.model_response = None
+        self.model_response_logprobs = None
         self.response_correct = False
         self.response_parsed = None
-
 
     
     def _format_user_prompt(self) -> str:
@@ -199,6 +199,7 @@ class FRQInstance(Instance):
         # below are derivational attributes that will be updated during code run
         self.user_prompt = self._format_user_prompt()
         self.model_response = None
+        self.model_response_logprobs = None
         self.response_correct = False
         self.response_parsed = None
 

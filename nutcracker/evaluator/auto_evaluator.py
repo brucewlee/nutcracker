@@ -10,10 +10,12 @@ from nutcracker.evaluator.frq_evaluator import FRQEvaluator
 #
 #
 class AutoEvaluator:
-    def __init__(self, data: Union[Pile, Task, List[MCQInstance], List[FRQInstance]], **engine_kwargs) -> None:
+    def __init__(self, data: Union[Pile, Task, List[MCQInstance], List[FRQInstance]], mcq_engine = 'recommended', frq_engine = 'recommended', **engine_kwargs) -> None:
         self.data = data
         self.engine_kwargs = engine_kwargs
         self._control_logging()
+        self.frq_engine = frq_engine
+        self.mcq_engine = mcq_engine
 
     def run(self, round_digits: int = 5) -> float:
         mcq_data = [instance for instance in self.data if isinstance(instance, MCQInstance)]
@@ -22,12 +24,12 @@ class AutoEvaluator:
         self.logger.info(f"found {len(frq_data)} FRQInstances.")
 
         if mcq_data:
-            mcq_evaluator = MCQEvaluator(mcq_data, engine='latest', **self.engine_kwargs)
-            mcq_evaluator.run(round_digits, called_from_auto = True)
+            mcq_evaluator = MCQEvaluator(mcq_data, engine=self.mcq_engine, **self.engine_kwargs)
+            mcq_evaluator.run(round_digits)
 
         if frq_data:
-            frq_evaluator = FRQEvaluator(frq_data, engine='latest', **self.engine_kwargs)
-            frq_evaluator.run(round_digits, called_from_auto = True)
+            frq_evaluator = FRQEvaluator(frq_data, engine=self.frq_engine, **self.engine_kwargs)
+            frq_evaluator.run(round_digits)
 
         # This function currently does not return accuracy. Modify as needed or use separate reporting.
 

@@ -6,31 +6,33 @@ from nutcracker.data.pile import Pile
 from nutcracker.data.instance import MCQInstance
 from nutcracker.utils import TqdmLoggingHandler
 from nutcracker.evaluator.engines.mcq_engine_alpha import MCQEngineAlpha
+from nutcracker.evaluator.engines.mcq_engine_beta import MCQEngineBeta
+from nutcracker.evaluator.engines.mcq_engine_gamma import MCQEngineGamma
+from nutcracker.evaluator.engines.mcq_engine_zeta import MCQEngineZeta
 #
 #
 class MCQEvaluator:
     def __init__(self, data: Union[Pile, Task, List[MCQInstance]], engine: str = 'alpha', **engine_kwargs) -> None:
         self.data = data
-        if engine == 'alpha' or engine == 'latest':
+        if engine == 'alpha':
             self.engine = MCQEngineAlpha(**engine_kwargs)
+        elif engine == 'beta':
+            self.engine = MCQEngineBeta(**engine_kwargs)
+        elif engine == 'gamma':
+            self.engine = MCQEngineGamma(**engine_kwargs)
+        elif engine == 'zeta' or engine == 'recommended':
+            self.engine = MCQEngineZeta(**engine_kwargs)
         self._control_logging()
 
 
 
-    def run(self, round_digits: int = 5, called_from_auto = False) -> float:
+    def run(self, round_digits: int = 5) -> float:
         correct_count = 0
-        if self.logger.getEffectiveLevel() <= logging.INFO and called_from_auto == False:
-            for instance in TqdmLoggingHandler(self.data, logger=self.logger, desc="Processing Instances"):
-                is_correct = self.engine.is_correct(instance)
-                instance.response_correct = is_correct  # Update the instance attribute here
-                if is_correct:
-                    correct_count += 1
-        else:
-            for instance in self.data:
-                is_correct = self.engine.is_correct(instance)
-                instance.response_correct = is_correct  # Update the instance attribute here
-                if is_correct:
-                    correct_count += 1
+        for instance in TqdmLoggingHandler(self.data, logger=self.logger, desc="Processing Instances"):
+            is_correct = self.engine.is_correct(instance)
+            instance.response_correct = is_correct  # Update the instance attribute here
+            if is_correct:
+                correct_count += 1
 
         accuracy = correct_count / len(self.data) if len(self.data) > 0 else 0.0
         return round(accuracy, round_digits) 

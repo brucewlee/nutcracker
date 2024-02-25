@@ -12,26 +12,19 @@ class FRQEvaluator:
     def __init__(
         self, data: Union[Pile, Task, List[FRQInstance]], engine: str = 'alpha', **engine_kwargs) -> None:
         self.data = data
-        if engine == 'alpha' or engine == 'latest':
+        if engine == 'alpha' or engine == 'recommended':
             self.engine = FRQEngineAlpha(**engine_kwargs)
         self._control_logging()
 
 
 
-    def run(self, round_digits: int = 5, called_from_auto = False) -> float:
+    def run(self, round_digits: int = 5) -> float:
         correct_count = 0
-        if self.logger.getEffectiveLevel() <= logging.INFO and called_from_auto == False:
-            for instance in TqdmLoggingHandler(self.data, logger=self.logger, desc="Processing Instances"):
-                is_correct = self.engine.is_correct(instance)
-                instance.response_correct = is_correct  # Update the instance attribute here
-                if is_correct:
-                    correct_count += 1
-        else:
-            for instance in self.data:
-                is_correct = self.engine.is_correct(instance)
-                instance.response_correct = is_correct  # Update the instance attribute here
-                if is_correct:
-                    correct_count += 1
+        for instance in TqdmLoggingHandler(self.data, logger=self.logger, desc="Processing Instances"):
+            is_correct = self.engine.is_correct(instance)
+            instance.response_correct = is_correct  # Update the instance attribute here
+            if is_correct:
+                correct_count += 1
 
         accuracy = correct_count / len(self.data) if len(self.data) > 0 else 0.0
         return round(accuracy, round_digits) 
