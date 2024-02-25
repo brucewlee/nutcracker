@@ -80,7 +80,7 @@ class MCQInstance(Instance):
         self.model_response = None
         self.model_response_logprobs = None
         self.response_correct = False
-        self.response_evaluator = False
+        self.response_evaluator = None
 
 
     
