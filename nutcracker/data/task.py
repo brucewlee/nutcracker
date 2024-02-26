@@ -53,7 +53,7 @@ class Task(InstanceCollection):
 
 
     @classmethod
-    def load_from_db(cls, task_name: str, db_directory: str):
+    def load_from_db(cls, task_name: str, db_directory: str, **kwargs):
         """(Not Supported due to Cloud Computing Restrictions) Class method to initialize a Task object from a task ID.
 
         Args:
