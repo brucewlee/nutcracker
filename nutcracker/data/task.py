@@ -93,7 +93,7 @@ class Task(InstanceCollection):
                 config_path = local_file_path
 
         # Initialize and return the Task object
-        return cls(test_path=test_path, example_path=example_path, config_path=config_path)
+        return cls(test_path=test_path, example_path=example_path, config_path=config_path, **kwargs)
     
 
 
