@@ -19,22 +19,22 @@ pip install nutcracker-py
 
 **Download Nutcracker DB**
 ```bash
-git clone https://github.com/brucewlee/nutcracker-db
+git clone https://github.com/walnut-research/nutcracker-db
 ```
 
 ### Route 2. GitHub
 **Install Nutcracker**         
 ```bash
-git clone https://github.com/brucewlee/nutcracker
+git clone https://github.com/walnut-research/nutcracker
 pip install -e nutcracker
 ```
 
 **Download Nutcracker DB**
 ```bash
-git clone https://github.com/brucewlee/nutcracker-db
+git clone https://github.com/walnut-research/nutcracker-db
 ```
 
-Check all tasks implemented in [Nutcracker DB](https://github.com/brucewlee/nutcracker-db)'s readme page.
+Check all tasks implemented in [Nutcracker DB](https://github.com/walnut-research/nutcracker-db)'s readme page.
 
 ---
 
