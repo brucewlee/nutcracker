@@ -1,7 +1,7 @@
 from distutils.core import setup
 from setuptools import find_packages
 
-this_version='0.0.1a28'
+this_version='0.0.1a29'
 
 # python setup.py sdist
 # python -m twine upload dist/*
@@ -24,5 +24,5 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     include_package_data=True,
-    package_data={'nutcracker': ['*']}
+    package_data={'nutcracker': ['*.yaml']}
 )
