@@ -1,7 +1,7 @@
 from distutils.core import setup
 from setuptools import find_packages
 
-this_version='0.0.1a29-2'
+this_version='0.0.1a29-3'
 
 # python setup.py sdist
 # python -m twine upload dist/*
