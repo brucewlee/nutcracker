@@ -15,7 +15,12 @@ class MCQEngineGamma:
         valid_options = [chr(ord('A') + i) for i in range(len(instance.options))]
 
         # Filter logprobs for valid options and ignore missing logprob values
-        filtered_logprobs = [entry for entry in logprobs if entry[0] in valid_options and len(entry) > 1]
+        try:
+            filtered_logprobs = [entry for entry in logprobs if entry[0] in valid_options and len(entry) > 1]
+        except TypeError:
+            # if only first position token was given
+            logprobs = instance.model_response_logprobs
+            filtered_logprobs = [entry for entry in logprobs if entry[0] in valid_options and len(entry) > 1]
 
         # If no valid logprobs are found, consider the response incorrect
         if not filtered_logprobs:
