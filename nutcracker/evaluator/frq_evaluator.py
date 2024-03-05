@@ -6,6 +6,7 @@ from nutcracker.data.pile import Pile
 from nutcracker.data.instance import FRQInstance
 from nutcracker.utils import TqdmLoggingHandler
 from nutcracker.evaluator.engines.frq_engine_alpha import FRQEngineAlpha
+from nutcracker.evaluator.engines.frq_engine_beta import FRQEngineBeta
 #
 #
 class FRQEvaluator:
@@ -15,6 +16,9 @@ class FRQEvaluator:
         if engine == 'alpha' or engine == 'recommended':
             self.response_evaluator_engine = 'frq-engine-alpha'
             self.engine = FRQEngineAlpha(**engine_kwargs)
+        elif engine == 'beta' or engine == 'recommended':
+            self.response_evaluator_engine = 'frq-engine-beta'
+            self.engine = FRQEngineBeta(**engine_kwargs)
         self._control_logging()
 
 

@@ -4,6 +4,7 @@ from nutcracker.data.instance import MCQInstance
 #
 #
 from openai import OpenAI
+import openai
 #
 #
 #
@@ -83,6 +84,8 @@ class MCQEngineAlpha:
                 )
                 interpreted_response = completion.choices[0].message.content.strip().upper()
                 break
+            except openai.BadRequestError:
+                interpreted_response = "None"
             except KeyboardInterrupt:
                 sys.exit()
 

@@ -11,7 +11,7 @@ https://github.com/brucewlee/nutcracker/assets/54278520/151403fc-217c-486c-8de6-
 
 # Installation
 
-### Route 1. PyPI (Do not use for now)
+### Route 1. PyPI
 **Install Nutcracker**
 ```bash
 pip install nutcracker-py

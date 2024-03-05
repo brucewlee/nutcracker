@@ -4,6 +4,7 @@ from nutcracker.data.instance import FRQInstance
 #
 #
 from openai import OpenAI
+import openai
 #
 #
 #
@@ -81,6 +82,8 @@ class FRQEngineAlpha:
                 )
                 interpreted_response = completion.choices[0].message.content.strip()
                 break
+            except openai.BadRequestError:
+                interpreted_response = "None"
             except KeyboardInterrupt:
                 sys.exit()
         return interpreted_response
