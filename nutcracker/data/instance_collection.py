@@ -6,6 +6,11 @@ import json
 from nutcracker.utils import get_nested_value
 #
 #
+import numpy as np
+from scipy.spatial.distance import pdist, squareform
+#
+#
+#
 class InstanceCollection:
     def __init__(self) -> None:
         """Initialize an empty collection of instances."""
@@ -48,7 +53,7 @@ class InstanceCollection:
 
 
 
-    def sample(self, n: int, seed: Optional[int] = None, in_place: bool = False) -> Optional[list]:
+    def sample(self, n: int, seed: Optional[int] = None, in_place: bool = True) -> Optional[list]:
         """
         Randomly sample 'n' instances from the collection. Optionally modify the collection in place.
 
@@ -67,6 +72,32 @@ class InstanceCollection:
             raise ValueError("Sample size 'n' cannot be greater than the total number of instances.")
         if seed is not None:
             random.seed(seed)
+        sampled_indices = random.sample(range(len(self.instances)), n)
+
+        if in_place:
+            self.instances = [self.instances[i] for i in sampled_indices]
+            return None
+        else:
+            return [self.instances[i] for i in sampled_indices]
+
+
+
+    def stylistic_sample(self, n: int, in_place: bool = True) -> Optional[list]:
+        """
+        Samples 'n' instances that are the furthest apart stylistically.
+
+        Args:
+            n (int): The number of instances to sample.
+            seed (Optional[int]): Optional random seed for reproducibility.
+
+        Returns:
+            List: A list of 'n' spaCy Doc objects sampled based on their stylistic differences.
+        """
+        if n > len(self.instances):
+            raise ValueError("Sample size 'n' cannot be greater than the total number of instances.")
+        nlp = spacy.load("en_core_web_sm")
+        for instances in
+
         sampled_indices = random.sample(range(len(self.instances)), n)
 
         if in_place:
