@@ -202,7 +202,7 @@ class FRQInstance(Instance):
         self.model_response = None
         self.model_response_logprobs = None
         self.response_correct = False
-        self.response_evaluator_engine = None
+        self.response_evaluator_judge = None
 
 
     

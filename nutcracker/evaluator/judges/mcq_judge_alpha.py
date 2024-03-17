@@ -8,7 +8,7 @@ import openai
 #
 #
 #
-class MCQEngineAlpha:
+class MCQJudgeAlpha:
     def __init__(self):
         # Use the kwargs as needed for configuration
         # Example: self.some_setting = kwargs.get('some_setting', default_value)

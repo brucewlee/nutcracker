@@ -3,7 +3,7 @@ from typing import Optional, List, Set
 from nutcracker.data.instance import MCQInstance
 #
 #
-class MCQEngineBeta:
+class MCQJudgeBeta:
     def __init__(self):
         pass
 

@@ -7,7 +7,7 @@ from openai import OpenAI
 #
 #
 #
-class MCQEngineZeta:
+class MCQJudgeZeta:
     def __init__(self):
         # Use the kwargs as needed for configuration
         # Example: self.some_setting = kwargs.get('some_setting', default_value)

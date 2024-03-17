@@ -15,7 +15,7 @@ class InstanceCollection:
     def __init__(self) -> None:
         """Initialize an empty collection of instances."""
         self.instances = []
-        self.evaluator_engine = None
+        self.evaluator_judge = None
 
 
 

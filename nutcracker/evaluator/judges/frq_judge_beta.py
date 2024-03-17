@@ -3,7 +3,7 @@ from typing import Optional, List, Set
 from nutcracker.data.instance import FRQInstance
 #
 #
-class FRQEngineBeta:
+class FRQJudgeBeta:
     def __init__(self):
         pass
 
