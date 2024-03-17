@@ -61,9 +61,9 @@ class Schema:
         if type(raw_response) == str:
             instance.model_response = raw_response
         elif type(raw_response) == dict:
-            if 'response' in raw_response:
+            if 'model_response' in raw_response:
                 instance.model_response = raw_response['model_response']
-            if 'first_logprobs' in raw_response:
+            if 'model_response_logprobs' in raw_response:
                 instance.model_response_logprobs = raw_response['model_response_logprobs']
             if 'user_prompt' in raw_response:
                 instance.user_prompt = raw_response['user_prompt']
