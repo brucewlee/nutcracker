@@ -1,4 +1,4 @@
-# Nutcracker - Large Model Evaluations and Experiments
+# Nutcracker - Large Model Evaluation Experiments
 
 like LM-Eval-Harness but without PyTorch madness. Bring-your-own-API + straightforward data management
 
