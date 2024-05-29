@@ -8,11 +8,9 @@ import openai
 #
 #
 #
-class FRQJudgeAlpha:
-    def __init__(self):
-        # Use the kwargs as needed for configuration
-        # Example: self.some_setting = kwargs.get('some_setting', default_value)
-        pass
+class FRQJudge:
+    def __init__(self, model):
+        self.model = model
 
 
 
@@ -29,8 +27,7 @@ class FRQJudgeAlpha:
 
 
 
-    @staticmethod
-    def _parse_model_response_intent_matching(response: str, correct_options: list) -> str:
+    def _parse_model_response_intent_matching(self, response: str, correct_options: list) -> str:
         client = OpenAI()
         few_shot = f"""
         Your job is: given a response, determine if the answer is correct or not. Say True or False and nothing else.
@@ -70,20 +67,12 @@ class FRQJudgeAlpha:
         interpreted_response = None
         while interpreted_response is None:
             try:
-                completion = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "user", "content": 'You respond with True or False and nothing else.'},
-                        {"role": "user", "content": few_shot}
-                    ],
-                    seed=123456789,
-                    timeout=15,
-                    temperature=1
+                completion = self.model.respond(
+                    'You respond with True or False and nothing else.\n\n' + few_shot
                 )
-                interpreted_response = completion.choices[0].message.content.strip()
+                interpreted_response = completion.strip().upper()
                 break
-            except openai.BadRequestError:
-                interpreted_response = "None"
             except KeyboardInterrupt:
                 sys.exit()
-        return interpreted_response
+
+        return set(interpreted_response.split(', ')) if interpreted_response else set()

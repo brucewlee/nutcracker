@@ -7,7 +7,6 @@ from nutcracker.utils import get_nested_value
 #
 #
 import numpy as np
-from scipy.spatial.distance import pdist, squareform
 #
 #
 #

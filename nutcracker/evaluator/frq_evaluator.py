@@ -5,20 +5,17 @@ from nutcracker.data.task import Task
 from nutcracker.data.pile import Pile
 from nutcracker.data.instance import FRQInstance
 from nutcracker.utils import TqdmLoggingHandler
-from nutcracker.evaluator.judges.frq_judge_alpha import FRQJudgeAlpha
-from nutcracker.evaluator.judges.frq_judge_beta import FRQJudgeBeta
+from nutcracker.evaluator.judges.frq_judge import FRQJudge
+from nutcracker.models import *
 #
 #
 class FRQEvaluator:
     def __init__(
-        self, data: Union[Pile, Task, List[FRQInstance]], judge: str = 'alpha', **judge_kwargs) -> None:
+        self, data: Union[Pile, Task, List[FRQInstance]], model, judge: str = 'alpha', **judge_kwargs) -> None:
         self.data = data
-        if judge == 'alpha' or judge == 'recommended':
-            self.response_evaluator_judge = 'frq-judge-alpha'
-            self.judge = FRQJudgeAlpha(**judge_kwargs)
-        elif judge == 'beta' or judge == 'recommended':
-            self.response_evaluator_judge = 'frq-judge-beta'
-            self.judge = FRQJudgeBeta(**judge_kwargs)
+        self.model = model
+        self.response_evaluator_judge = f'frq-judge-{self.model}'
+        self.judge = FRQJudge(self.model)
         self._control_logging()
 
 

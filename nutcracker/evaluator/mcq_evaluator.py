@@ -5,27 +5,16 @@ from nutcracker.data.task import Task
 from nutcracker.data.pile import Pile
 from nutcracker.data.instance import MCQInstance
 from nutcracker.utils import TqdmLoggingHandler
-from nutcracker.evaluator.judges.mcq_judge_alpha import MCQJudgeAlpha
-from nutcracker.evaluator.judges.mcq_judge_beta import MCQJudgeBeta
-from nutcracker.evaluator.judges.mcq_judge_gamma import MCQJudgeGamma
-from nutcracker.evaluator.judges.mcq_judge_zeta import MCQJudgeZeta
+from nutcracker.evaluator.judges.mcq_judge import MCQJudge
+from nutcracker.models import *
 #
 #
 class MCQEvaluator:
-    def __init__(self, data: Union[Pile, Task, List[MCQInstance]], judge: str = 'alpha', **judge_kwargs) -> None:
+    def __init__(self, data: Union[Pile, Task, List[MCQInstance]], model, judge: str = 'alpha', **judge_kwargs) -> None:
         self.data = data
-        if judge == 'alpha':
-            self.response_evaluator_judge = 'mcq-judge-alpha'
-            self.judge = MCQJudgeAlpha(**judge_kwargs)
-        elif judge == 'beta':
-            self.response_evaluator_judge = 'mcq-judge-beta'
-            self.judge = MCQJudgeBeta(**judge_kwargs)
-        elif judge == 'gamma':
-            self.response_evaluator_judge = 'mcq-judge-gamma'
-            self.judge = MCQJudgeGamma(**judge_kwargs)
-        elif judge == 'zeta' or judge == 'recommended':
-            self.response_evaluator_judge = 'mcq-judge-zeta'
-            self.judge = MCQJudgeZeta(**judge_kwargs)
+        self.model = model
+        self.response_evaluator_judge = f'mcq-judge-{self.model}'
+        self.judge = MCQJudge(self.model)
         self._control_logging()
 
 
@@ -33,8 +22,9 @@ class MCQEvaluator:
     def run(self, round_digits: int = 5) -> float:
         correct_count = 0
         for instance in TqdmLoggingHandler(self.data, logger=self.logger, desc="Processing Instances"):
-            is_correct = self.judge.is_correct(instance)
+            is_correct, found_options = self.judge.is_correct(instance)
             instance.response_correct = is_correct  # Update the instance attribute here
+            instance.judge_interpretation = found_options  # Update the instance attribute here
             instance.response_evaluator_judge = self.response_evaluator_judge # fingerprint
             if is_correct:
                 correct_count += 1

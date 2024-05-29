@@ -32,10 +32,17 @@ class Instance:
             # example_data_list can be empty for zero-shot evaluation
             example_data_list = kwargs.get('example_data_list')
             return MCQInstance(config, test_data, example_data_list)
+
+        elif config['construction']['class'].lower().strip() == "mcq-survey":
+            # example_data_list can be empty for zero-shot evaluation
+            example_data_list = kwargs.get('example_data_list')
+            return MCQSurveyInstance(config, test_data, example_data_list)
+
         elif config['construction']['class'].lower().strip() == "frq":
             # example_data_list can be empty for zero-shot evaluation
             example_data_list = kwargs.get('example_data_list')
             return FRQInstance(config, test_data, example_data_list)
+
         else:
             raise ValueError("Invalid instance construction")
 
@@ -167,6 +174,49 @@ class MCQInstance(Instance):
 
         return user_prompt
 
+
+
+class MCQSurveyInstance(MCQInstance):
+    def __init__(
+            self, 
+            config: dict, 
+            test_data: dict, 
+            example_data_list: List[dict] = None
+        ) -> None:
+        """`MCQInstance` constructor.
+        
+        Args:
+            config (dict): Configuration for the instance.
+            test_data (dict): Test data for the instance.
+            example_data_list (List[dict], optional): List of example data. Defaults to None.
+            
+        Raises:
+            None
+
+        Returns:
+            None
+        """
+        # task-level attributes
+        self.config = config
+        self.example_data_list = example_data_list # not a list of Instance, just a list of dicts
+
+        # below are attributes that are initialized from data
+        self.centerpiece = test_data["centerpiece"]
+        self.options = test_data["options"]
+        self.correct_options = None
+        self.question_number = test_data["question_number"]
+
+        # Check if 'context' key exists in test_data
+        self.context_exists = 'context' in test_data and test_data['context']
+        if self.context_exists:
+            self.context = test_data["context"]
+
+        # below are derivational attributes that will be updated during code run
+        self.user_prompt = self._format_user_prompt()
+        self.model_response = None
+        self.model_response_logprobs = None
+        self.response_correct = False
+        self.response_evaluator = None
 
 
 class FRQInstance(Instance):
