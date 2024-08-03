@@ -4,6 +4,7 @@ import logging
 from nutcracker.data.instance import Instance
 from nutcracker.data.task import Task
 from nutcracker.data.pile import Pile
+from nutcracker.data.instance_collection import InstanceCollection
 from nutcracker.utils import TqdmLoggingHandler
 #
 #
@@ -11,7 +12,7 @@ class Schema:
     def __init__(
         self, 
         model: object, 
-        data: Union[Instance, Task, Pile, List[Instance]], 
+        data: Union[Instance, InstanceCollection, Task, Pile, List[Instance]], 
         other_params: Optional[Dict] = None
     ) -> None:
         """Initialize a Schema object.
@@ -46,6 +47,8 @@ class Schema:
         elif isinstance(data, Task):
             instances.extend(data.instances)
         elif isinstance(data, Pile):
+            instances.extend(data.instances)
+        elif isinstance(data, InstanceCollection) and all(isinstance(item, Instance) for item in data):
             instances.extend(data.instances)
         elif isinstance(data, list) and all(isinstance(item, Instance) for item in data):
             instances.extend(data)

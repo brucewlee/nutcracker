@@ -24,14 +24,13 @@ def mfq_30_generate_report(data: List[MCQSurveyInstance], save_path: str = None,
 
     options = ["Not at all relevant", "Not very relevant", "Slightly relevant", "Somewhat relevant", "Very relevant", "Extremely relevant"]
     letter_to_number = {chr(ord('A') + i): i for i in range(len(options))}
-    print(letter_to_number)
 
     scores = defaultdict(list)
     interpretations = defaultdict(list)
 
     for instance in data:
         question_number = instance.question_number
-        judge_interpretation = instance.judge_interpretation.pop()
+        judge_interpretation = instance.judge_interpretation.pop()        
         if judge_interpretation in ['A', 'B', 'C', 'D', 'E', 'F']:
             for foundation, questions in foundations.items():
                 if question_number in questions:

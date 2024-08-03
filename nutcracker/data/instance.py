@@ -1,4 +1,5 @@
 from typing import List
+import copy
 #
 from nutcracker.utils import number_to_letter
 #
@@ -45,6 +46,9 @@ class Instance:
 
         else:
             raise ValueError("Invalid instance construction")
+    
+    def copy(self):
+        return copy.deepcopy(self)
 
 
 
