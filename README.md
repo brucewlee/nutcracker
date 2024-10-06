@@ -1,6 +1,7 @@
 # Nutcracker - Large Model Evaluation
+Nutcracker is currently highly experimental
 
-like LM-Eval-Harness but without PyTorch madness. use this to evaluate LLMs served through APIs
+Nutcracker is like LM-Eval-Harness but without PyTorch madness. use this to evaluate LLMs served through APIs
 
 https://github.com/brucewlee/nutcracker/assets/54278520/151403fc-217c-486c-8de6-489af25789ce
 
